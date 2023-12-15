@@ -1,3 +1,16 @@
-﻿  Menu.cpp
-C:\Users\thaih\Documents\K22\Nam_2\HK1\ObjectOrientedPrograming\Final_ThucHanh\Terist_3\Terist\Terist\Menu.cpp(156): warning C4715: 'Menu::getChoiceFromMenu': not all control paths return a value
+﻿  App.cpp
+  Base.cpp
+  MenuObject.cpp
+C:\Users\thaih\Documents\K22\Nam_2\HK1\ObjectOrientedPrograming\Final_ThucHanh\Terist_3\Terist\Terist\MenuObject.cpp(15,44): warning C4267: 'initializing': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\thaih\Documents\K22\Nam_2\HK1\ObjectOrientedPrograming\Final_ThucHanh\Terist_3\Terist\Terist\MenuObject.cpp(15,17): warning C4267: 'initializing': conversion from 'size_t' to 'const int', possible loss of data
+C:\Users\thaih\Documents\K22\Nam_2\HK1\ObjectOrientedPrograming\Final_ThucHanh\Terist_3\Terist\Terist\MenuObject.cpp(79,18): warning C4244: 'argument': conversion from 'double' to 'const int', possible loss of data
+C:\Users\thaih\Documents\K22\Nam_2\HK1\ObjectOrientedPrograming\Final_ThucHanh\Terist_3\Terist\Terist\MenuObject.cpp(81,29): warning C4244: 'argument': conversion from 'double' to 'const int', possible loss of data
+C:\Users\thaih\Documents\K22\Nam_2\HK1\ObjectOrientedPrograming\Final_ThucHanh\Terist_3\Terist\Terist\MenuObject.cpp(91,34): warning C4244: 'argument': conversion from 'double' to 'const int', possible loss of data
+C:\Users\thaih\Documents\K22\Nam_2\HK1\ObjectOrientedPrograming\Final_ThucHanh\Terist_3\Terist\Terist\MenuObject.cpp(103,41): warning C4244: 'argument': conversion from 'double' to 'const int', possible loss of data
+C:\Users\thaih\Documents\K22\Nam_2\HK1\ObjectOrientedPrograming\Final_ThucHanh\Terist_3\Terist\Terist\MenuObject.cpp(112,39): warning C4244: 'argument': conversion from 'double' to 'const int', possible loss of data
+C:\Users\thaih\Documents\K22\Nam_2\HK1\ObjectOrientedPrograming\Final_ThucHanh\Terist_3\Terist\Terist\MenuObject.cpp(121,38): warning C4244: 'argument': conversion from 'double' to 'const int', possible loss of data
+C:\Users\thaih\Documents\K22\Nam_2\HK1\ObjectOrientedPrograming\Final_ThucHanh\Terist_3\Terist\Terist\MenuObject.cpp(130,40): warning C4244: 'argument': conversion from 'double' to 'const int', possible loss of data
+  Terist.cpp
+  TextObject.cpp
+  Generating Code...
   Terist.vcxproj -> C:\Users\thaih\Documents\K22\Nam_2\HK1\ObjectOrientedPrograming\Final_ThucHanh\Terist_3\Terist\x64\Debug\Terist.exe

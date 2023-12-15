@@ -70,6 +70,10 @@
     <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <IncludePath>$(SolutionDir)SDL_lib\SDL2\include;$(SolutionDir)SDL_lib\SDL2_image-2.0.1\include;$(SolutionDir)SDL_lib\SDL2_mixer-devel-2.6.3-VC\SDL2_mixer-2.6.3\include;$(SolutionDir)SDL_lib\SDL2_ttf\include;$(IncludePath)</IncludePath>
+    <LibraryPath>$(SolutionDir)SDL_lib\SDL2\lib\x64;$(SolutionDir)SDL_lib\SDL2_image-2.0.1\lib\x64;$(SolutionDir)SDL_lib\SDL2_mixer-devel-2.6.3-VC\SDL2_mixer-2.6.3\lib\x64;$(SolutionDir)SDL_lib\SDL2_ttf\lib\x64;$(LibraryPath)</LibraryPath>
+  </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
       <WarningLevel>Level3</WarningLevel>
@@ -108,6 +112,8 @@
     <Link>
       <SubSystem>Console</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>$(SolutionDir)SDL_lib\SDL2\lib\x64;$(SolutionDir)SDL_lib\SDL2_image-2.0.1\lib\x64;$(SolutionDir)SDL_lib\SDL2_mixer-devel-2.6.3-VC\SDL2_mixer-2.6.3\lib\x64;$(SolutionDir)SDL_lib\SDL2_ttf\lib\x64;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>SDL2.lib;SDL2main.lib;SDL2_image.lib;SDL2_mixer.lib;SDL2_ttf.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
@@ -127,17 +133,24 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="App.cpp" />
+    <ClCompile Include="Base.cpp" />
     <ClCompile Include="board.cpp" />
     <ClCompile Include="Menu.cpp" />
+    <ClCompile Include="MenuObject.cpp" />
     <ClCompile Include="piece.cpp" />
     <ClCompile Include="source.cpp" />
     <ClCompile Include="Terist.cpp" />
+    <ClCompile Include="TextObject.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Base.h" />
     <ClInclude Include="board.h" />
     <ClInclude Include="header.h" />
     <ClInclude Include="Menu.h" />
+    <ClInclude Include="MenuObject.h" />
     <ClInclude Include="piece.h" />
+    <ClInclude Include="TextObject.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
