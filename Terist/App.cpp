@@ -80,7 +80,7 @@ int main(int argc, char* argv[])
         return 0;
     }
 
-    /* TEXT */
+    // TEXT 
     int index_hover = -1;
     MenuObject main_menu;
     TextObject title_game, play_game, credits_game, quit_game, setting_game;
