@@ -65,6 +65,11 @@ void TextObject::SetColor(int type)
 		color = { 0, 0, 0 };
 		text_color_ = color;
 	}
+	else if (type == YELLOW_TEXT)
+	{
+		color = { 238, 220, 130 };
+		text_color_ = color;
+	}
 }
 
 void TextObject::RenderText(SDL_Renderer* screen, int x_pos, int y_pos, SDL_Rect* clip, double angle, SDL_Point* center, SDL_RendererFlip flip)
