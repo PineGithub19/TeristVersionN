@@ -1,6 +1,7 @@
 #include "Base.h"
 #include "MenuObject.h"
 #include "CreditsObject.h"
+#include "Setting.h"
 
 bool Init(SDL_Window*& g_window, SDL_Renderer*& g_screen, TTF_Font*& TitleFont, TTF_Font*& NormalFont)
 {
@@ -127,6 +128,9 @@ int main(int argc, char* argv[])
     // CREDITS
     CreditsObject* credits = NULL;
 
+    // SETTING
+    Setting* setting = NULL;
+
     bool is_quit = false;
     bool is_in_menu = true;
     while (!is_quit)
@@ -154,6 +158,16 @@ int main(int argc, char* argv[])
                     credits->LoadCredits(g_screen, g_event, TitleFont, NormalFont, is_in_menu, is_quit);
                     delete credits;
                     credits = NULL;
+                }
+            }
+            if (decision == 3)
+            {
+                if (setting == NULL)
+                {
+                    setting = new Setting();
+                    setting->LoadSetting(g_screen, g_event, TitleFont, NormalFont, is_in_menu, is_quit, music);
+                    delete setting;
+                    setting = NULL;
                 }
             }
         }
