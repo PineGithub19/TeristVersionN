@@ -1,5 +1,6 @@
 #include "Base.h"
 #include "MenuObject.h"
+#include "CreditsObject.h"
 
 bool Init(SDL_Window*& g_window, SDL_Renderer*& g_screen, TTF_Font*& TitleFont, TTF_Font*& NormalFont)
 {
@@ -10,7 +11,7 @@ bool Init(SDL_Window*& g_window, SDL_Renderer*& g_screen, TTF_Font*& TitleFont, 
 
     SDL_SetHint(SDL_HINT_RENDER_SCALE_QUALITY, "1");
 
-    g_window = SDL_CreateWindow("GROUP 5 - DESIGN PATTERNS", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
+    g_window = SDL_CreateWindow("GROUP 5 - TETRIS GAME", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, SCREEN_WIDTH, SCREEN_HEIGHT, SDL_WINDOW_SHOWN);
 
     if (!g_window)
         success = false;
@@ -31,8 +32,8 @@ bool Init(SDL_Window*& g_window, SDL_Renderer*& g_screen, TTF_Font*& TitleFont, 
         if (TTF_Init() == -1)
             return false;
 
-        TitleFont = TTF_OpenFont("font//MoonKids1.ttf", 64);
-        NormalFont = TTF_OpenFont("font//MoonKids1.ttf", 32);
+        TitleFont = TTF_OpenFont("font//BULKYPIX.ttf", 64);
+        NormalFont = TTF_OpenFont("font//BULKYPIX.ttf", 32);
 
         if (TitleFont == NULL || NormalFont == NULL)
             return false;
@@ -46,9 +47,9 @@ bool Init(SDL_Window*& g_window, SDL_Renderer*& g_screen, TTF_Font*& TitleFont, 
     return success;
 }
 
-bool LoadBackground(SDL_Renderer* renderer, BaseObject& bg)
+bool LoadBackground(SDL_Renderer* renderer, BaseObject& bg, const string& path)
 {
-    bool res = bg.LoadImage("assets//background.png", renderer);
+    bool res = bg.LoadImage(path, renderer);
     return res;
 }
 
@@ -81,22 +82,22 @@ int main(int argc, char* argv[])
     BaseObject bg, logo;
     int decision = -1;
 
-    if (!Init(g_window, g_screen, TitleFont, NormalFont) || !LoadBackground(g_screen, bg))
+    if (!Init(g_window, g_screen, TitleFont, NormalFont) || !LoadBackground(g_screen, bg, "assets//background.png"))
     {
         return 0;
     }
 
-    // TEXT 
+    // MENU 
     int index_hover = -1;
-    MenuObject main_menu;
+    MenuObject* main_menu = new MenuObject;
     TextObject title_game, play_game, credits_game, quit_game, setting_game;
 
-    main_menu.LoadLogoGame(g_screen, logo);
-    main_menu.InitTitleGame(title_game, g_screen, TitleFont);
-    main_menu.InitPlayGame(play_game, g_screen, NormalFont);
-    main_menu.InitCreditsGame(credits_game, g_screen, NormalFont);
-    main_menu.InitQuitGame(quit_game, g_screen, NormalFont);
-    main_menu.InitSettingGame(setting_game, g_screen, NormalFont);
+    main_menu->LoadLogoGame(g_screen, logo);
+    main_menu->InitTitleGame(title_game, g_screen, TitleFont);
+    main_menu->InitPlayGame(play_game, g_screen, NormalFont);
+    main_menu->InitCreditsGame(credits_game, g_screen, NormalFont);
+    main_menu->InitQuitGame(quit_game, g_screen, NormalFont);
+    main_menu->InitSettingGame(setting_game, g_screen, NormalFont);
 
     //Init SDL_mixer
     if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) == -1)
@@ -123,61 +124,80 @@ int main(int argc, char* argv[])
 
     vector<TextObject*> text_menu_components = { &play_game, &credits_game, &quit_game, &setting_game };
 
+    // CREDITS
+    CreditsObject* credits = NULL;
+
     bool is_quit = false;
+    bool is_in_menu = true;
     while (!is_quit)
     {
         SDL_RenderClear(g_screen);
 
-        main_menu.Move_Menu(g_screen, bg);
-        logo.Render(g_screen);
-
-        title_game.RenderText(g_screen, title_game.Get_Rect().x, title_game.Get_Rect().y);
-        play_game.RenderText(g_screen, play_game.Get_Rect().x, play_game.Get_Rect().y);
-        credits_game.RenderText(g_screen, credits_game.Get_Rect().x, credits_game.Get_Rect().y);
-        quit_game.RenderText(g_screen, quit_game.Get_Rect().x, quit_game.Get_Rect().y);
-        setting_game.RenderText(g_screen, setting_game.Get_Rect().x, setting_game.Get_Rect().y);
-
-        while (SDL_PollEvent(&g_event))
+        if (is_in_menu)
         {
-            decision = main_menu.Main_Menu(g_screen, g_event, text_menu_components, main_menu, is_quit, index_hover);
-            if (index_hover == 0)
-            {
-                main_menu.InitPlayGame(play_game, g_screen, NormalFont);
-                if (decision == 0)
-                {
-                    Mix_PlayChannel(-1, chunk, 0);
-                }
-            }
+            main_menu->Move_Menu(g_screen, bg);
+            logo.Render(g_screen);
 
+            title_game.RenderText(g_screen, title_game.Get_Rect().x, title_game.Get_Rect().y);
+            play_game.RenderText(g_screen, play_game.Get_Rect().x, play_game.Get_Rect().y);
+            credits_game.RenderText(g_screen, credits_game.Get_Rect().x, credits_game.Get_Rect().y);
+            quit_game.RenderText(g_screen, quit_game.Get_Rect().x, quit_game.Get_Rect().y);
+            setting_game.RenderText(g_screen, setting_game.Get_Rect().x, setting_game.Get_Rect().y);
+        }
+        else if (is_in_menu == false)
+        {
+            if (decision == 1)
+            {
+                if (credits == NULL)
+                {
+                    credits = new CreditsObject();
+                    credits->LoadCredits(g_screen, g_event, TitleFont, NormalFont, is_in_menu, is_quit);
+                    delete credits;
+                    credits = NULL;
+                }
+            }
+        }
+
+        while (SDL_PollEvent(&g_event) && is_in_menu)
+        {
+            decision = main_menu->Main_Menu(g_screen, g_event, text_menu_components, main_menu, is_quit, index_hover);
+            if (index_hover == 0)
+                main_menu->InitPlayGame(play_game, g_screen, NormalFont);
             else if (index_hover == 1)
-            {
-                main_menu.InitCreditsGame(credits_game, g_screen, NormalFont);
-                if (decision == 1)
-                {
-                    Mix_PlayChannel(-1, chunk, 0);
-                }
-            }
+                main_menu->InitCreditsGame(credits_game, g_screen, NormalFont);
             else if (index_hover == 2)
-            {
-                main_menu.InitQuitGame(quit_game, g_screen, NormalFont);
-                if (decision == 2)
-                {
-                    Mix_PlayChannel(-1, chunk, 0);
-                }
-            }
+                main_menu->InitQuitGame(quit_game, g_screen, NormalFont);
             else if (index_hover == 3)
+                main_menu->InitSettingGame(setting_game, g_screen, NormalFont);
+
+            if (decision == 0)
             {
-                main_menu.InitSettingGame(setting_game, g_screen, NormalFont);
-                if (decision == 3)
-                {
-                    Mix_PlayChannel(-1, chunk, 0);
-                }
+                is_in_menu = false;
+            }
+            else if (decision == 1)
+            {
+                is_in_menu = false;
+            }
+            else if (decision == 2)
+            {
+                is_in_menu = false;
+                is_quit = true;
+            }
+            else if (decision == 3)
+            {
+                is_in_menu = false;
             }
         }
 
         SDL_RenderPresent(g_screen);
     }
     Close(g_window, g_screen);
+
+    if (main_menu)
+    {
+        delete main_menu;
+        main_menu = NULL;
+    }
 
     return 0;
 }
