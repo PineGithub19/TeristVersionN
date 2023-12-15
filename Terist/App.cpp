@@ -23,14 +23,14 @@ bool Init(SDL_Window*& g_window, SDL_Renderer*& g_screen, TTF_Font*& TitleFont, 
         {
             SDL_SetRenderDrawColor(g_screen, 255, 255, 255, 255);
             int img_flag = IMG_INIT_PNG;
-            
+
             if (!(IMG_Init(img_flag) && img_flag))
                 success = false;
         }
 
         if (TTF_Init() == -1)
             return false;
-        
+
         TitleFont = TTF_OpenFont("font//MoonKids1.ttf", 64);
         NormalFont = TTF_OpenFont("font//MoonKids1.ttf", 32);
 
@@ -54,6 +54,7 @@ bool LoadBackground(SDL_Renderer* renderer, BaseObject& bg)
 
 void Close(SDL_Window*& g_window, SDL_Renderer*& g_screen)
 {
+    Mix_CloseAudio();
     SDL_DestroyRenderer(g_screen);
     g_screen = NULL;
 
@@ -71,6 +72,11 @@ int main(int argc, char* argv[])
     static SDL_Event g_event;
     static TTF_Font* TitleFont = NULL;
     static TTF_Font* NormalFont = NULL;
+
+    //Sound Effect
+    Mix_Chunk* chunk = NULL;
+    //Background Music
+    Mix_Music* music = NULL;
 
     BaseObject bg, logo;
     int decision = -1;
@@ -92,7 +98,30 @@ int main(int argc, char* argv[])
     main_menu.InitQuitGame(quit_game, g_screen, NormalFont);
     main_menu.InitSettingGame(setting_game, g_screen, NormalFont);
 
-    vector<TextObject*> text_menu_components = {&play_game, &credits_game, &quit_game, &setting_game};
+    //Init SDL_mixer
+    if (Mix_OpenAudio(44100, MIX_DEFAULT_FORMAT, 2, 2048) == -1)
+    {
+        printf("%s", Mix_GetError());
+        return -1;
+    }
+
+    //Load Sound Effect
+    chunk = Mix_LoadWAV("music//enter.wav");
+    if (chunk == NULL)
+    {
+        printf("%s", Mix_GetError());
+        return -1;
+    }
+
+    //Load Music
+    music = Mix_LoadMUS("music//nhacnen.mp3");
+    if (music == NULL)
+    {
+        printf("%s", Mix_GetError());
+    }
+    Mix_PlayMusic(music, 1);
+
+    vector<TextObject*> text_menu_components = { &play_game, &credits_game, &quit_game, &setting_game };
 
     bool is_quit = false;
     while (!is_quit)
@@ -112,13 +141,38 @@ int main(int argc, char* argv[])
         {
             decision = main_menu.Main_Menu(g_screen, g_event, text_menu_components, main_menu, is_quit, index_hover);
             if (index_hover == 0)
+            {
                 main_menu.InitPlayGame(play_game, g_screen, NormalFont);
+                if (decision == 0)
+                {
+                    Mix_PlayChannel(-1, chunk, 0);
+                }
+            }
+
             else if (index_hover == 1)
+            {
                 main_menu.InitCreditsGame(credits_game, g_screen, NormalFont);
+                if (decision == 1)
+                {
+                    Mix_PlayChannel(-1, chunk, 0);
+                }
+            }
             else if (index_hover == 2)
+            {
                 main_menu.InitQuitGame(quit_game, g_screen, NormalFont);
+                if (decision == 2)
+                {
+                    Mix_PlayChannel(-1, chunk, 0);
+                }
+            }
             else if (index_hover == 3)
+            {
                 main_menu.InitSettingGame(setting_game, g_screen, NormalFont);
+                if (decision == 3)
+                {
+                    Mix_PlayChannel(-1, chunk, 0);
+                }
+            }
         }
 
         SDL_RenderPresent(g_screen);
