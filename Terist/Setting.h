@@ -6,9 +6,14 @@
 
 class Setting : public CreditsObject
 {
+private:
+	int volumn;
 public:
 	Setting();
 	~Setting();
+
+	void setVolumn(const int&);
+	int getVolumn() const;
 
 	void LoadSetting(SDL_Renderer*, SDL_Event&, TTF_Font*, TTF_Font*, bool&, bool&, Mix_Music*&);
 };
