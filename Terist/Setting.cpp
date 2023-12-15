@@ -2,7 +2,7 @@
 
 Setting::Setting()
 {
-
+	volumn = 64;
 }
 
 Setting::~Setting()
@@ -10,10 +10,20 @@ Setting::~Setting()
 
 }
 
+void Setting::setVolumn(const int& vol)
+{
+	volumn = vol;
+}
+
+int Setting::getVolumn() const
+{
+	return volumn;
+}
+
 void Setting::LoadSetting(SDL_Renderer* renderer, SDL_Event& g_event, TTF_Font* TitleFont, TTF_Font*NormalFont, bool&is_in_menu, bool&is_in_program, Mix_Music*& music)
 {
 	int x_mouse = 0, y_mouse = 0;
-	TextObject title, turn_on, turn_off, back_btn;
+	TextObject title, turn_on, turn_off, inc_music, dec_music, back_btn;
 	BaseObject* bg = new BaseObject;
 
 	bg->LoadImage("assets//credits.png", renderer);
@@ -21,14 +31,18 @@ void Setting::LoadSetting(SDL_Renderer* renderer, SDL_Event& g_event, TTF_Font* 
 	title.SetColor(TextObject::YELLOW_TEXT);
 	turn_on.SetColor(TextObject::YELLOW_TEXT);
 	turn_off.SetColor(TextObject::YELLOW_TEXT);
+	inc_music.SetColor(TextObject::YELLOW_TEXT);
+	dec_music.SetColor(TextObject::YELLOW_TEXT);
 	back_btn.SetColor(TextObject::YELLOW_TEXT);
 
 	InitTextContent(renderer, TitleFont, title, "SETTING", 10);
-	InitTextContent(renderer, NormalFont, turn_on, "TURN ON MUSIC", 300);
-	InitTextContent(renderer, NormalFont, turn_off, "TURN OFF MUSIC", 400);
-	InitTextContent(renderer, NormalFont, back_btn, "BACK", 500);
+	InitTextContent(renderer, NormalFont, turn_on, "TURN ON MUSIC", 200);
+	InitTextContent(renderer, NormalFont, turn_off, "TURN OFF MUSIC", 300);
+	InitTextContent(renderer, NormalFont, inc_music, "INCREASE VOLUMN", 400);
+	InitTextContent(renderer, NormalFont, dec_music, "DECREASE VOLUMN", 500);
+	InitTextContent(renderer, NormalFont, back_btn, "BACK", 600);
 
-	vector<TextObject*> items = { &turn_on, &turn_off, &back_btn };
+	vector<TextObject*> items = { &turn_on, &turn_off, &inc_music, &dec_music, &back_btn };
 
 	bool selected = false;
 	while (true)
@@ -39,6 +53,8 @@ void Setting::LoadSetting(SDL_Renderer* renderer, SDL_Event& g_event, TTF_Font* 
 		title.RenderText(renderer, title.Get_Rect().x, title.Get_Rect().y);
 		turn_on.RenderText(renderer, turn_on.Get_Rect().x, turn_on.Get_Rect().y);
 		turn_off.RenderText(renderer, turn_off.Get_Rect().x, turn_off.Get_Rect().y);
+		inc_music.RenderText(renderer, inc_music.Get_Rect().x, inc_music.Get_Rect().y);
+		dec_music.RenderText(renderer, dec_music.Get_Rect().x, dec_music.Get_Rect().y);
 		back_btn.RenderText(renderer, back_btn.Get_Rect().x, back_btn.Get_Rect().y);
 
 		while (SDL_PollEvent(&g_event))
@@ -72,11 +88,15 @@ void Setting::LoadSetting(SDL_Renderer* renderer, SDL_Event& g_event, TTF_Font* 
 						items[it]->SetColor(TextObject::YELLOW_TEXT);
 					}
 					if (it == 0)
-						InitTextContent(renderer, NormalFont, turn_on, "TURN ON MUSIC", 300);
+						InitTextContent(renderer, NormalFont, turn_on, "TURN ON MUSIC", 200);
 					else if (it == 1)
-						InitTextContent(renderer, NormalFont, turn_off, "TURN OFF MUSIC", 400);
+						InitTextContent(renderer, NormalFont, turn_off, "TURN OFF MUSIC", 300);
 					else if (it == 2)
-						InitTextContent(renderer, NormalFont, back_btn, "BACK", 500);
+						InitTextContent(renderer, NormalFont, inc_music, "INCREASE VOLUMN", 400);
+					else if (it == 3)
+						InitTextContent(renderer, NormalFont, dec_music, "DECREASE VOLUMN", 500);
+					else if (it == 4)
+						InitTextContent(renderer, NormalFont, back_btn, "BACK", 600);
 				}
 			}
 			else if (g_event.type == SDL_MOUSEBUTTONDOWN)
@@ -97,6 +117,22 @@ void Setting::LoadSetting(SDL_Renderer* renderer, SDL_Event& g_event, TTF_Font* 
 								Mix_HaltMusic();
 							}
 							else if (it == 2)
+							{
+								if (getVolumn() >= 100)
+									setVolumn(100);
+								setVolumn(getVolumn() + 20);
+								Mix_VolumeMusic(getVolumn() + 20);
+								Mix_PlayMusic(music, 1);
+							}
+							else if (it == 3)
+							{
+								if (getVolumn() <= 0)
+									setVolumn(0);
+								setVolumn(getVolumn() - 20);
+								Mix_VolumeMusic(getVolumn() - 20);
+								Mix_PlayMusic(music, 1);
+							}
+							else if (it == 4)
 							{
 								is_in_menu = true;
 								return;
