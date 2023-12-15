@@ -122,6 +122,7 @@ int main(int argc, char* argv[])
         printf("%s", Mix_GetError());
     }
     Mix_PlayMusic(music, 1);
+    Mix_VolumeMusic(64);
 
     vector<TextObject*> text_menu_components = { &play_game, &credits_game, &quit_game, &setting_game };
 
