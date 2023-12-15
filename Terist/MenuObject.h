@@ -14,7 +14,7 @@ public:
 	MenuObject(const double& = 0, const bool& = false, const bool& = false);
 	~MenuObject();
 
-	int Main_Menu(SDL_Renderer*, SDL_Event, std::vector<TextObject*>&, MenuObject&, bool&, int&);
+	int Main_Menu(SDL_Renderer*, SDL_Event, std::vector<TextObject*>&, MenuObject*&, bool&, int&);
 	void Move_Menu(SDL_Renderer*, BaseObject&);
 
 	bool LoadLogoGame(SDL_Renderer*, BaseObject&);
