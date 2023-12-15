@@ -97,4 +97,7 @@ void CreditsObject::LoadCredits(SDL_Renderer* renderer, SDL_Event& g_event, TTF_
 		}
 		SDL_RenderPresent(renderer);
 	}
+
+	delete bg;
+	bg = NULL;
 }
