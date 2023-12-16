@@ -110,10 +110,12 @@ void Setting::LoadSetting(SDL_Renderer* renderer, SDL_Event& g_event, TTF_Font* 
 						{
 							if (it == 0)
 							{
+								setVolumn(64);
 								Mix_PlayMusic(music, 1);
 							}
 							else if (it == 1)
 							{
+								setVolumn(0);
 								Mix_HaltMusic();
 							}
 							else if (it == 2)
